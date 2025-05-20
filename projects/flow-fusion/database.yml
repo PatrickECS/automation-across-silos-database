@@ -10,12 +10,12 @@
 
     - name: Install MariaDB
       ansible.builtin.dnf:
-        name: mariadb-server
+        name: mariadb.x86_64
         state: latest
 
     - name: Start MariaDB now and on boot
       ansible.builtin.systemd:
-        name: mariadb-server
+        name: mariadb
         state: started
         enabled: true
 
