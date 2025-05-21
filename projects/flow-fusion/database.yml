@@ -37,7 +37,7 @@
       community.mysql.mysql_db:
         name: "{{ project_code_name }}"
         state: present
-        login_host: localhost
+        login_unix_socket: /run/mysqld/mysqld.sock
 
     - name: Create database user with all database privileges on the applications's database
       community.mysql.mysql_user:
