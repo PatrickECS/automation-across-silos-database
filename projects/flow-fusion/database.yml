@@ -31,15 +31,20 @@
         - mariadb
         - sshd
 
-    - name: Allow access to MariaDB through local firewall
+    - name: Allow access to SSHd through local firewall
       ansible.posix.firewalld:
-        service: "{{ item }}"
+        service: ssh
         permanent: true
         state: enabled
-      loop:
-        - mysql
-        - ssh
+        immediate: true
 
+    - name: Allow access to MySQL through local firewall
+      ansible.posix.firewalld:
+        port: 3306/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+        
     - name: Erstelle die MariaDB-Datenbank
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
