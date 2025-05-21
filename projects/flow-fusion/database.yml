@@ -38,19 +38,19 @@
     - name: Create the MariaDB database
       command: >
           mysql -u root -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS {{ project_code_name }};"
-      no_log: true
+      #no_log: true
 
     - name: Erstelle den MariaDB-Benutzer
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "CREATE USER IF NOT EXISTS '{{ project_code_name }}_user'@'%' IDENTIFIED BY '{{ db_password }}';"
-      no_log: true
+      #no_log: true
 
     - name: Gewähre dem Benutzer alle Rechte auf die Datenbank
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "GRANT ALL PRIVILEGES ON {{ project_code_name }}.* TO '{{ db_user }}'@'%';"
-      no_log: true
+      #no_log: true
 
     - name: Rechte neu laden
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES;"
-      no_log: true
+      #no_log: true
