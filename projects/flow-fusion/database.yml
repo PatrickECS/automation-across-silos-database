@@ -27,6 +27,11 @@
         permanent: true
         state: enabled
 
+    - name: Install python packages
+      ansible.builtin.pip:
+        name:
+          - PyMySQL
+
     - name: Create a new database
       community.mysql.mysql_db:
         name: "{{ project_code_name }}"
@@ -39,4 +44,3 @@
         password: 12345
         priv: "{{ project_code_name }}.*:ALL"
         state: present
-        
