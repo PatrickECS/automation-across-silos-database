@@ -14,14 +14,14 @@
 
   tasks:
 
-    - name: Install MariaDB
+    - name: Install Packages
       ansible.builtin.dnf:
         name: 
           - mariadb.x86_64
-          - sshd
+          - openssh-server
         state: latest
 
-    - name: Start MariaDB now and on boot
+    - name: Start services now and on boot
       ansible.builtin.systemd:
         name: "{{ item }}"
         state: started
