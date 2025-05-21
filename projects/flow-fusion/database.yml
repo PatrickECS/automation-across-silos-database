@@ -4,7 +4,9 @@
   gather_facts: true
   become: true
 
-  vars: []
+  vars:
+    project_code_name: flow-fusion
+    project_state: present
 
   tasks:
 
@@ -24,3 +26,17 @@
         service: mysql
         permanent: true
         state: enabled
+
+    - name: Create a new database
+      community.mysql.mysql_db:
+        name: "{{ project_code_name }}"
+        state: present
+        login_unix_socket: /run/mysqld/mysqld.sock
+
+    - name: Create database user with all database privileges on the applications's database
+      community.mysql.mysql_user:
+        name: "{{ project_code_name }}"
+        password: 12345
+        priv: "{{ project_code_name }}.*:ALL"
+        state: present
+        
