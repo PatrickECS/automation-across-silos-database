@@ -16,20 +16,28 @@
 
     - name: Install MariaDB
       ansible.builtin.dnf:
-        name: mariadb.x86_64
+        name: 
+          - mariadb.x86_64
+          - sshd
         state: latest
 
     - name: Start MariaDB now and on boot
       ansible.builtin.systemd:
-        name: mariadb
+        name: "{{ item }}"
         state: started
         enabled: true
+      loop:
+        - mariadb
+        - ssh
 
     - name: Allow access to MariaDB through local firewall
       ansible.posix.firewalld:
-        service: mysql
+        service: "{{ item }}"
         permanent: true
         state: enabled
+      loop:
+        - mysql
+        - ssh
 
     - name: Erstelle die MariaDB-Datenbank
       command: >
