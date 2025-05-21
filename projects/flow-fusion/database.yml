@@ -2,7 +2,7 @@
 - name: Manage Database
   hosts: tm-demo-vm-flow-fusion-db
   gather_facts: true
-  become: false
+  become: true
 
   vars:
     project_code_name: flow-fusion
@@ -14,32 +14,30 @@
       ansible.builtin.dnf:
         name: mariadb.x86_64
         state: latest
-      become: true
 
     - name: Start MariaDB now and on boot
       ansible.builtin.systemd:
         name: mariadb
         state: started
         enabled: true
-      become: true
 
     - name: Allow access to MariaDB through local firewall
       ansible.posix.firewalld:
         service: mysql
         permanent: true
         state: enabled
-      become: true
 
     - name: Install python packages
       ansible.builtin.pip:
         name:
           - PyMySQL
+      become: false
 
     - name: Create a new database
       community.mysql.mysql_db:
         name: "{{ project_code_name }}"
         state: present
-        login_unix_socket: /run/mysqld/mysqld.sock
+        login_host: localhost
 
     - name: Create database user with all database privileges on the applications's database
       community.mysql.mysql_user:
