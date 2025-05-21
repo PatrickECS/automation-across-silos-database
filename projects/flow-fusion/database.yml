@@ -7,6 +7,8 @@
   vars:
     project_code_name: flow-fusion
     project_state: present
+    mysql_root_password: "root"
+    db_password: "redhat"
 
   tasks:
 
@@ -33,15 +35,22 @@
           - PyMySQL
       become: false
 
-    - name: Create a new database
-      community.mysql.mysql_db:
-        name: "{{ project_code_name }}"
-        state: present
-        login_unix_socket: /run/mysqld/mysqld.sock
+    - name: Create the MariaDB database
+      command: >
+          mysql -u root -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS {{ project_code_name }};"
+      no_log: true
 
-    - name: Create database user with all database privileges on the applications's database
-      community.mysql.mysql_user:
-        name: "{{ project_code_name }}"
-        password: 12345
-        priv: "{{ project_code_name }}.*:ALL"
-        state: present
+    - name: Erstelle den MariaDB-Benutzer
+      command: >
+        mysql -u root -p{{ mysql_root_password }} -e "CREATE USER IF NOT EXISTS '{{ project_code_name }}_user'@'%' IDENTIFIED BY '{{ db_password }}';"
+      no_log: true
+
+    - name: Gewähre dem Benutzer alle Rechte auf die Datenbank
+      command: >
+        mysql -u root -p{{ mysql_root_password }} -e "GRANT ALL PRIVILEGES ON {{ project_code_name }}.* TO '{{ db_user }}'@'%';"
+      no_log: true
+
+    - name: Rechte neu laden
+      command: >
+        mysql -u root -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES;"
+      no_log: true
