@@ -17,7 +17,8 @@
     - name: Install Packages
       ansible.builtin.dnf:
         name: 
-          - mariadb.x86_64
+          - mariadb-server
+          - mariadb
           - openssh-server
         state: latest
 
@@ -28,7 +29,7 @@
         enabled: true
       loop:
         - mariadb
-        - ssh
+        - sshd
 
     - name: Allow access to MariaDB through local firewall
       ansible.posix.firewalld:
