@@ -29,6 +29,6 @@
     - name: Register and auto-subscribe to available content
       redhat.rhel_system_roles.redhat_subscription:
         state: present
-        username: "{{ rhc_auth.login.redhat_username }}"
-        password: "{{ rhc_auth.login.redhat_password }}"
+        username: "{{ redhat_username }}"
+        password: "{{ redhat_password }}"
         auto_attach: true
