@@ -1,6 +1,6 @@
 ---
 - name: Project Flow Fusion - Register and Update OS
-  hosts: poweredon
+  hosts: rhel9_64Guest
   gather_facts: true
   become: true
 

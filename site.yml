@@ -1,5 +1,5 @@
 ---
-- name: Import Flow-Fusion Project Playbooks - Resgister RHEL
+- name: Import Flow-Fusion Project Playbooks - Register RHEL
   import_playbook: projects/flow-fusion/register.yml
 - name: Import Flow-Fusion Project Playbooks - Update packages
   import_playbook: projects/flow-fusion/update.yml
