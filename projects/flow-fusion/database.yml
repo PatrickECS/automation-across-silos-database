@@ -1,6 +1,6 @@
 ---
 - name: Manage Database
-  hosts: tm-demo-vm-flow-fusion-db
+  hosts: all
   gather_facts: true
   become: true
 
