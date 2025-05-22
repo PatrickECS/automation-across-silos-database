@@ -1,0 +1,11 @@
+- name: test vault
+  hosts: localhost
+  gather_facts: no
+
+  vars_files: vaults/database.yml
+
+  tasks:
+
+  - name: debug
+    debug:
+      var: db_name
