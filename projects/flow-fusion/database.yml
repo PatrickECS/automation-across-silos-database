@@ -1,52 +1,65 @@
 ---
-- name: Manage Database
-  hosts: tm-demo-vm-flow-fusion-db
+- name: Project Flow Fusion - Manage Database
+  hosts: all
   gather_facts: true
   become: true
+
+  vars_files:
+    - ../../vaults/database.yml
 
   vars:
     project_code_name: flow-fusion
     project_state: present
-    mysql_root_password: root
-    db_name: flow_fusion
-    db_user: flow_fusion_user
-    db_password: redhat
 
   tasks:
 
-    - name: Install MariaDB
+    - name: Install Packages
       ansible.builtin.dnf:
-        name: mariadb.x86_64
+        name: 
+          - mariadb-server
+          - mariadb
+          - openssh-server
         state: latest
 
-    - name: Start MariaDB now and on boot
+    - name: Start services now and on boot
       ansible.builtin.systemd:
-        name: mariadb
+        name: "{{ item }}"
         state: started
         enabled: true
+      loop:
+        - mariadb
+        - sshd
 
-    - name: Allow access to MariaDB through local firewall
+    - name: Allow access to SSHd through local firewall
       ansible.posix.firewalld:
-        service: mysql
+        service: ssh
         permanent: true
         state: enabled
+        immediate: true
+
+    - name: Allow access to MySQL through local firewall
+      ansible.posix.firewalld:
+        port: 3306/tcp
+        permanent: true
+        state: enabled
+        immediate: true
 
     - name: Erstelle die MariaDB-Datenbank
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
-      no_log: true  # Damit das Passwort nicht im Log sichtbar ist
+      #no_log: true
 
     - name: Erstelle den MariaDB-Benutzer
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "CREATE USER IF NOT EXISTS '{{ db_user }}'@'%' IDENTIFIED BY '{{ db_password }}';"
-      no_log: true
+      #no_log: true
 
     - name: Gewähre dem Benutzer alle Rechte auf die Datenbank
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "GRANT ALL PRIVILEGES ON {{ db_name }}.* TO '{{ db_user }}'@'%';"
-      no_log: true
+      #no_log: true
 
     - name: Rechte neu laden
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES;"
-      no_log: true
+      #no_log: true

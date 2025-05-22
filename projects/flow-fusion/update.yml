@@ -1,0 +1,14 @@
+---
+- name: Project Flow Fusion - Register and Update OS
+  hosts: rhel9_64Guest
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: Update all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_facts['os_family'] == "RedHat"
+        
