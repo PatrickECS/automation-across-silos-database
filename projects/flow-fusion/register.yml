@@ -5,7 +5,7 @@
   become: true
 
   vars_files:
-    - vaults/rh.yml
+    - ../../vaults/rh.yml
 
   vars:
 

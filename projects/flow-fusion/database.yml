@@ -5,15 +5,11 @@
   become: true
 
   vars_files:
-    - vaults/database.yml
+    - ../../vaults/database.yml
 
   vars:
     project_code_name: flow-fusion
     project_state: present
-    mysql_root_password: root
-    #db_name: flow_fusion
-    #db_user: flow_fusion_user
-    #db_password: redhat
 
   tasks:
 
@@ -51,7 +47,7 @@
     - name: Erstelle die MariaDB-Datenbank
       command: >
         mysql -u root -p{{ mysql_root_password }} -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
-      no_log: true  # Damit das Passwort nicht im Log sichtbar ist
+      no_log: true
 
     - name: Erstelle den MariaDB-Benutzer
       command: >
