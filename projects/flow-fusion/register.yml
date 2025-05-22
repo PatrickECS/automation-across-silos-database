@@ -20,6 +20,8 @@
       autoupdate: false
       remediation: absent
 
+    rhc_release: "9.6"
+
   roles:
     - name: redhat.rhel_system_roles.rhc
       when: ansible_facts['distribution'] == "RedHat"
