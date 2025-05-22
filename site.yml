@@ -1,4 +1,5 @@
 ---
 - name: Import Flow-Fusion Project Playbooks - Database
   import_playbook: projects/flow-fusion/database.yml
- 
+- name: Import Flow-Fusion Project Playbooks - Update OS
+  import_playbook: projects/flow-fusion/update-os.yml

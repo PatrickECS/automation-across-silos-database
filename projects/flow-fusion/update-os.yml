@@ -1,0 +1,34 @@
+---
+- name: Project Flow Fusion - Register and Update OS
+  hosts: poweredon
+  gather_facts: true
+  become: true
+
+  vars:
+
+    rhc_auth:
+      login:
+        username: "{{ redhat_username }}"
+        password: "{{ redhat_password }}"
+
+    rhc_repositories:
+      - {name: "rhel-9-for-x86_64-baseos-rpms", state: enabled}
+      - {name: "rhel-9-for-x86_64-appstream-rpms", state: enabled}
+      - {name: "codeready-builder-for-rhel-9-x86_64-rpms", state: disabled}
+
+    rhc_insights:
+      autoupdate: false
+      remediation: absent
+
+  roles:
+    - name: redhat.rhel_system_roles.rhc
+      when: ansible_facts['distribution'] == "RedHat"
+
+  tasks:
+
+    - name: Update all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_facts['os_family'] == "RedHat"
+        
