@@ -1,5 +1,5 @@
 ---
-- name: Project Flow Fusion - Register and Update OS
+- name: Project Flow Fusion - Register RHEL
   hosts: poweredon
   gather_facts: true
   become: true
@@ -26,9 +26,9 @@
 
   tasks:
 
-    - name: Update all packages
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-      when: ansible_facts['os_family'] == "RedHat"
-        
+    - name: Register and auto-subscribe to available content
+      redhat.rhel_system_roles.redhat_subscription:
+        state: present
+        username: "{{ rhc_auth.login.redhat_username }}"
+        password: "{{ rhc_auth.login.redhat_password }}"
+        auto_attach: true
