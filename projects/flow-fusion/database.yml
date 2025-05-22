@@ -1,5 +1,5 @@
 ---
-- name: Manage Database
+- name: Project Flow Fusion - Manage Database
   hosts: all
   gather_facts: true
   become: true
